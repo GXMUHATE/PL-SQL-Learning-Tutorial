@@ -1,21 +1,17 @@
-CREATE TABLE hr_event_audit
-    (
-        event_type VARCHAR2(20),
-        logon_date DATE,
-        logon_time VARCHAR2(15),
-        logof_date DATE,
-        logof_time VARCHAR2 (15)
-    );
+DESC hr_event_audit;
+SELECT * FROM hr_event_audit;
+TRUNCATE TABLE hr_event_audit;
 
-CREATE OR REPLACE TRIGGER hr_logon_audit
-AFTER LOGON ON SCHEMA
+
+CREATE OR REPLACE TRIGGER hr_logOff_audit
+BEFORE LOGOFF ON SCHEMA
 BEGIN
     INSERT INTO hr_event_audit VALUES(
     ora_sysevent,
-    sysdate,
-    TO_CHAR(sysdate, 'hh24:mi:ss'),
     NULL,
-    NULL
+    NULL,
+    SYSDATE,
+    TO_CHAR(sysdate, 'hh24:mi:ss')
     );
     COMMIT;
 END;
